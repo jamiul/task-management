@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('status')->default(Task::NOT_STARTED);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

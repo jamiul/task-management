@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Models\Task;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
@@ -13,15 +14,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $tasks = Task::all();
+        return response()->json($tasks);
     }
 
     /**
@@ -29,7 +23,8 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        $task = Task::create($request->validated());
+        return response()->json($task, Response::HTTP_CREATED);
     }
 
     /**
@@ -37,15 +32,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Task $task)
-    {
-        //
+        return response()->json($task);
     }
 
     /**
@@ -53,7 +40,13 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        if (!$task) {
+            return response()->json(['message' => 'Task not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $task->update($request->validated());
+
+        return response()->json($task);
     }
 
     /**
@@ -61,6 +54,12 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        if (!$task) {
+            return response()->json(['message' => 'Task not found'], 404);
+        }
+
+        $task->delete();
+
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

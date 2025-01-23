@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        USER_ID: '${WWWUSER:-1000}'
+        GROUP_ID: '${WWWGROUP:-1000}'
+        USER: '${USER:-whoami}'
+    container_name: task-api
+    restart: always
+    working_dir: /var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "9000:9003"
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/php/config/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - task-network
+
+  nginx:
+    image: nginx:1.19-alpine
+    container_name: task-nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - task-network
+
+  db:
+    container_name: task-db
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: task_db
+      MYSQL_USER: task_user
+      MYSQL_PASSWORD: task123
+      MYSQL_ROOT_PASSWORD: task123
+    networks:
+      - task-network
+
+networks:
+  task-network:
+    driver: bridge

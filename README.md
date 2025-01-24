@@ -93,3 +93,11 @@ Run the all test
 ```bash
 ./docker/test.sh
 ```
+
+## Postman test
+
+```bash
+Task-Management.postman_collection.json
+```
+Import the Task-Management.postman_collection.json in your postman
+then run the test.

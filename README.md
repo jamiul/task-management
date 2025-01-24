@@ -30,11 +30,12 @@ Business Logic:
 
 Validate inputs (e.g., title should not be empty).
 Handle cases where a task ID does not exist (return a proper error response).
-Bonus Points:
 
+Bonus Points:
 Add API authentication using Laravel Sanctum or Passport.
 Implement unit tests for the API endpoints.
-Deliverables
+
+Deliverables:
 A public GitHub repository with the Laravel project.
 Clear instructions in a README.md file on:
 How to set up and run the project locally.

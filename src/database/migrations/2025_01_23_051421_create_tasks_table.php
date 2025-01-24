@@ -14,9 +14,10 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('status')->default(Task::NOT_STARTED);
+            $table->string('status')->default(Task::STATUS_PENDING);
             $table->softDeletes();
             $table->timestamps();
         });

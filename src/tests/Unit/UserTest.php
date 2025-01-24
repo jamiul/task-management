@@ -2,15 +2,21 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use App\Models\Task;
+use App\Models\User;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     */
-    public function test_example(): void
+    use RefreshDatabase;
+
+    // test user has many tasks
+    public function test_user_has_many_tasks()
     {
-        $this->assertTrue(true);
+        $user = $this->createUser();
+        $this->createTask(['user_id' => $user->id]);
+
+        $this->assertInstanceOf(Task::class, $user->tasks->first());
     }
 }
